@@ -1,65 +1,66 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Link from 'next/link';
+import Layout, { siteTitle } from '../components/layout'
+import Date from '../components/Date';
+import utilStyles from '../styles/utils.module.css'
+import classnames from 'classnames';
+import { useState } from 'react';
+import { getSortedPostsData } from '../lib/posts';
 
-export default function Home() {
+// use the 'swr' package which provides a hook to fetch data at client-side
+// link: https://swr.vercel.app/ to read more
+
+export default function Home({ allPostsData, hello }) {
+  const [color, setColor] = useState(false);
+  const colorClass = classnames({
+    [utilStyles.red]:color,
+    [utilStyles.black]:!color
+  })
+
   return (
-    <div className={styles.container}>
+    <Layout home>
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>{siteTitle}</title>
       </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+      <section className={utilStyles.headingMd}>
+        <p>The one above all!</p>
+        <p className={colorClass}>
+          (This is a sample website - you’ll be building a site like this on{' '}
+          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
         </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <button onClick={() => setColor(!color)}>Change</button>
+      </section>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>Blog</h2>
+        <ul className={utilStyles.list}>
+          {allPostsData.map(({ id, date, title }) => (
+            <li className={utilStyles.listItem} key={id}>
+            <Link href={`/posts/${id}`}>
+              <a>{title}</a>
+            </Link>
+            <br />
+            <small className={utilStyles.lightText}>
+              <Date dateString={date} />
+            </small>
+          </li>          
+          ))}
+        </ul>
+        <p>{hello.name}</p>
+      </section>
+    </Layout>
   )
 }
+
+export const getStaticProps = async () => {
+  const allPostsData = getSortedPostsData();
+  const hello = await fetch('http://localhost:3000/api/hello').then(res => res.json());
+  
+  return {
+    props: {
+      allPostsData,
+      hello
+    }
+  }
+} 
