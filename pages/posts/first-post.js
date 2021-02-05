@@ -1,10 +1,11 @@
 import Link from "next/link"
 
 import Head from 'next/head';
+import Layout from "../../components/Layout";
 
 const firstPost = () => {
     return (
-        <div>
+        <Layout firstPost>
             <Head>
                 <title>First Post</title>
             </Head>
@@ -13,7 +14,7 @@ const firstPost = () => {
             <Link href="/">
                 <a>Back to home</a>
             </Link>
-        </div>
+        </Layout>
     )
 }
 

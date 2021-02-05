@@ -2,10 +2,11 @@ import utilStyles from '../../styles/utils.module.css'
 import Head from 'next/head';
 import Date from '../../components/Date';
 import { getAllPostIds, getPostData } from "../../lib/posts"
+import Layout from '../../components/Layout';
 
 const post = ({ postData }) => {
     return (
-        <>
+        <Layout post>
         <Head>
             <title>{postData.title}</title>
         </Head>
@@ -23,7 +24,7 @@ const post = ({ postData }) => {
             </article>        
             <div dangerouslySetInnerHTML={{__html: postData.processedHtml}}></div>
         </div>
-        </>
+        </Layout>
     )
 }
 
