@@ -10,7 +10,7 @@ import { getSortedPostsData } from '../lib/posts';
 // use the 'swr' package which provides a hook to fetch data at client-side
 // link: https://swr.vercel.app/ to read more
 
-export default function Home({ allPostsData, hello }) {
+export default function Home({ allPostsData }) {
   const [color, setColor] = useState(false);
   const colorClass = classnames({
     [utilStyles.red]:color,
@@ -57,8 +57,7 @@ export const getStaticProps = async () => {
   
   return {
     props: {
-      allPostsData,
-      hello
+      allPostsData
     }
   }
 } 
