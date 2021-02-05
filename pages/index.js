@@ -47,7 +47,6 @@ export default function Home({ allPostsData, hello }) {
           </li>          
           ))}
         </ul>
-        <p>{hello.name}</p>
       </section>
     </Layout>
   )
