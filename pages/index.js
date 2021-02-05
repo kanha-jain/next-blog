@@ -54,7 +54,6 @@ export default function Home({ allPostsData, hello }) {
 
 export const getStaticProps = async () => {
   const allPostsData = getSortedPostsData();
-  const hello = await fetch('/api/hello').then(res => res.json());
   
   return {
     props: {
